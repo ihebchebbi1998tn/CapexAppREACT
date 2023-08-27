@@ -2,21 +2,93 @@ import React, { useEffect, useState } from "react";
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc"); // Default sort direction
 
-  // Fetch user data from Symfony API
   useEffect(() => {
-    // Replace with your Symfony API endpoint to fetch users
     fetch("http://127.0.0.1:8001/user/get")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching users:", error));
   }, []);
 
+  const filteredUsers = users.filter(
+    (user) =>
+      user.nom_utilisateur.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (selectedGroup === "" || user.groupe_utilisateur === selectedGroup) &&
+      (selectedDepartment === "" || user.role_utilisateur === selectedDepartment)
+  );
+
+  const sortedUsers = [...filteredUsers].sort((a, b) => {
+    const aValue = a.nom_utilisateur;
+    const bValue = b.nom_utilisateur;
+    if (sortDirection === "asc") {
+      return aValue.localeCompare(bValue);
+    } else {
+      return bValue.localeCompare(aValue);
+    }
+  });
+
   return (
     <div className="col-lg-12 d-flex align-items-stretch">
       <div className="card w-100">
         <div className="card-body p-4">
           <h5 className="card-title fw-semibold mb-4">Table d'Utilisateurs</h5>
+
+          <div className="d-flex align-items-center mb-3">
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Rechercher par nom..."
+              className="form-control me-3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
+            {/* Group Select */}
+            <select
+              className="form-select me-3"
+              value={selectedGroup}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+            >
+              <option value="">Tous les groupes</option>
+              <option value="CLC">CLC</option>
+              <option value="CLN">CLN</option>
+              <option value="CLSB">CLSB</option>
+              <option value="SBC">SBC</option>
+              <option value="CF">CF</option>
+              <option value="Delta Plastic">Delta Plastic</option>
+              <option value="STIAL">STIAL</option>
+              <option value="SOCOGES">SOCOGES</option>
+            </select>
+
+          {/* Department Select */}
+<select
+  className="form-select"
+  value={selectedDepartment}
+  onChange={(e) => setSelectedDepartment(e.target.value)}
+>
+  <option value="">Tous les départements</option>
+  <option value="Ressources humaines (RH)">
+    Ressources humaines (RH)
+  </option>
+  <option value="Finance">Finance</option>
+  <option value="Marketing">Marketing</option>
+  <option value="Ventes">Ventes</option>
+  <option value="Recherche et développement (R&D)">
+    Recherche et développement (R&D)
+  </option>
+  <option value="Production">Production</option>
+  <option value="Approvisionnement">Approvisionnement</option>
+  <option value="Service client">Service client</option>
+  <option value="Informatique">Informatique</option>
+  <option value="Juridique">Juridique</option>
+  <option value="Logistique">Logistique</option>
+</select>
+          </div>
+
           <div className="table-responsive">
             <table className="table text-nowrap mb-0 align-middle">
               <thead className="text-dark fs-4">
@@ -42,7 +114,7 @@ const UsersTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {sortedUsers.map((user) => (
                   <tr key={user.id_utilisateur}>
                     <td className="border-bottom-0">
                       <h6 className="fw-semibold mb-1">
