@@ -1,0 +1,39 @@
+/* Custom CSS for search input and icon */
+.search-input {
+    position: relative;
+    padding-right: 35px; /* Adjust this value to control the space for the icon */
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    right: 2px; /* Adjust this value to control the position of the icon */
+    transform: translateY(-50%);
+    pointer-events: none; /* Prevent the icon from being clickable */
+  }
+
+  /* Ensure the icon stays inside the input */
+.input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+   /* Add the following CSS to style the scrollbar */
+   .table-responsive::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background-color: #5d87ff;
+    border-radius: 3px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background-color: #3a61b9;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 3px;
+  }
