@@ -13,12 +13,11 @@ const AddUsers = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null); // Add success state
 
-  
   const handleEmailPrefixChange = (e) => {
     const inputEmailPrefix = e.target.value.replace("@", ""); // Remove "@" if entered
     setEmailPrefix(inputEmailPrefix);
   };
-  
+
   const departments = [
     "Ressources humaines (RH)",
     "Finance",
@@ -38,20 +37,20 @@ const AddUsers = () => {
     setError(null);
     setError(null);
     setSuccess(null);
-  
+
     if (
-        !nomUtilisateur ||
-        !emailPrefix ||
-        !motDePasse ||
-        !codeUtilisateur ||
-        !selectedDepartment ||
-        !groupeUtilisateur ||
-        !typeUtilisateur
-      ) {
-        setError("Please fill all fields.");
-        return;
-      }
-      
+      !nomUtilisateur ||
+      !emailPrefix ||
+      !motDePasse ||
+      !codeUtilisateur ||
+      !selectedDepartment ||
+      !groupeUtilisateur ||
+      !typeUtilisateur
+    ) {
+      setError("Please fill all fields.");
+      return;
+    }
+
     const user = {
       nom_utilisateur: nomUtilisateur,
       email_utilisateur: `${emailPrefix}@groupedelice.com.tn`,
@@ -63,8 +62,10 @@ const AddUsers = () => {
     };
 
     try {
-        // Check if the user already exists by email or code
-        const response = await fetch("http://127.0.0.1:8001/user/check-existence", {
+      // Check if the user already exists by email or code
+      const response = await fetch(
+        "http://127.0.0.1:8000/user/check-existence",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -73,44 +74,44 @@ const AddUsers = () => {
             email_utilisateur: user.email_utilisateur,
             code_utilisateur: user.code_utilisateur,
           }),
-        });
-    
-        const data = await response.json();
-    
-        if (response.ok) {
-          if (data.exists) {
-            setError("L'utilisateur existe déjà.");
-          } else {
-            // User doesn't exist, proceed with adding the user
-            const addResponse = await fetch("http://127.0.0.1:8001/user/create", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(user),
-            });
-    
-            if (addResponse.ok) {
-              setSuccess("User added successfully.");
-            } else {
-              setError("Failed to add user.");
-            }
-          }
-        } else {
-          setError("An error occurred while checking user existence.");
         }
-      } catch (error) {
-        setError("An error occurred while adding the user.");
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.exists) {
+          setError("L'utilisateur existe déjà.");
+        } else {
+          // User doesn't exist, proceed with adding the user
+          const addResponse = await fetch("http://127.0.0.1:8000/user/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          });
+
+          if (addResponse.ok) {
+            setSuccess("User added successfully.");
+          } else {
+            setError("Failed to add user.");
+          }
+        }
+      } else {
+        setError("An error occurred while checking user existence.");
       }
-    };
+    } catch (error) {
+      setError("An error occurred while adding the user.");
+    }
+  };
   return (
     <div className="row">
       <div className="col-lg-12 d-flex align-items-stretch">
         <div className="card w-100">
           <div className="card-body">
-            <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
-              
-            </div>
+          <h5 className="card-title fw-semibold mb-4">Ajouter unUtilisateurs</h5>
+
 
             {error && (
               <div className="alert alert-danger" role="alert">
@@ -140,22 +141,21 @@ const AddUsers = () => {
                 </div>
                 <div className="col-md-6">
                   <label htmlFor="emailUtilisateur" className="form-label">
-                    Email 
+                    Email
                   </label>
                   <div className="input-group">
-
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="emailUtilisateur"
-                    aria-describedby="emailHelp"
-                    value={emailPrefix}
-                    onChange={handleEmailPrefixChange}
-
-                  />
-                            <span className="input-group-text">@groupedelice.com.tn</span>
-                            </div>
-
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="emailUtilisateur"
+                      aria-describedby="emailHelp"
+                      value={emailPrefix}
+                      onChange={handleEmailPrefixChange}
+                    />
+                    <span className="input-group-text">
+                      @groupedelice.com.tn
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -248,8 +248,13 @@ const AddUsers = () => {
               <div className="row mt-3">
                 <div className="col-md-12 d-flex justify-content-end">
                   <button type="submit" className="btn btn-outline-primary">
-                  <FontAwesomeIcon icon={faPlus} className="me-1" size="1" style={{ color: "#5d87ff" }} />
-                  Ajouter
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      className="me-1"
+                      size="1"
+                      style={{ color: "#5d87ff" }}
+                    />
+                    Ajouter
                   </button>
                 </div>
               </div>

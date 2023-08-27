@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginForm from './LoginForm';
+import SimpleForm from './simpleform';
 
 const LoginPage = () => {
   return (
@@ -12,7 +13,6 @@ const LoginPage = () => {
                 <div className="text-nowrap logo-img text-center d-block py-3 w-100">
                   <img src="assets/logo.png" width="250" alt="" />
                 </div>
-              
                 <LoginForm />
               </div>
             </div>

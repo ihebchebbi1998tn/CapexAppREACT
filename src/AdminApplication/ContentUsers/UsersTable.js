@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import ModalConfirmDelete from "./ModalConfirmDelete";
+import ModalUserEdit from "./ModalUserEdit";
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
@@ -6,19 +8,62 @@ const UsersTable = () => {
   const [selectedGroup, setSelectedGroup] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [sortDirection, setSortDirection] = useState("asc"); // Default sort direction
+  const [showModal, setShowModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [reloadComponent, setReloadComponent] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleDeleteUser = (user) => {
+    console.log("handleDeleteUser called with user:", user);
+    setUserToDelete(user);
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (userToDelete) {
+      fetch(
+        `http://127.0.0.0:8000/user/delete/${userToDelete.id_utilisateur}`,
+        {
+          method: "DELETE",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setReloadComponent(true);
+          setDeleteStatus(true);
+        })
+        .catch((error) => {
+          console.error("Error deleting user:", error);
+          setDeleteStatus(false);
+        })
+        .finally(() => {
+          setShowModal(false);
+        });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setUserToDelete(null);
+    setShowModal(false);
+  };
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8001/user/get")
+    fetch("http://127.0.0.1:8000/user/get")
       .then((response) => response.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        setUsers(data);
+      })
       .catch((error) => console.error("Error fetching users:", error));
-  }, []);
+  }, [reloadComponent]);
 
   const filteredUsers = users.filter(
     (user) =>
       user.nom_utilisateur.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (selectedGroup === "" || user.groupe_utilisateur === selectedGroup) &&
-      (selectedDepartment === "" || user.role_utilisateur === selectedDepartment)
+      (selectedDepartment === "" ||
+        user.role_utilisateur === selectedDepartment)
   );
 
   const sortedUsers = [...filteredUsers].sort((a, b) => {
@@ -39,6 +84,7 @@ const UsersTable = () => {
 
           <div className="d-flex align-items-center mb-3">
             {/* Search Input */}
+
             <input
               type="text"
               placeholder="Rechercher par nom..."
@@ -64,30 +110,42 @@ const UsersTable = () => {
               <option value="SOCOGES">SOCOGES</option>
             </select>
 
-          {/* Department Select */}
-<select
-  className="form-select"
-  value={selectedDepartment}
-  onChange={(e) => setSelectedDepartment(e.target.value)}
->
-  <option value="">Tous les départements</option>
-  <option value="Ressources humaines (RH)">
-    Ressources humaines (RH)
-  </option>
-  <option value="Finance">Finance</option>
-  <option value="Marketing">Marketing</option>
-  <option value="Ventes">Ventes</option>
-  <option value="Recherche et développement (R&D)">
-    Recherche et développement (R&D)
-  </option>
-  <option value="Production">Production</option>
-  <option value="Approvisionnement">Approvisionnement</option>
-  <option value="Service client">Service client</option>
-  <option value="Informatique">Informatique</option>
-  <option value="Juridique">Juridique</option>
-  <option value="Logistique">Logistique</option>
-</select>
+            {/* Department Select */}
+            <select
+              className="form-select"
+              value={selectedDepartment}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+            >
+              <option value="">Tous les départements</option>
+              <option value="Ressources humaines (RH)">
+                Ressources humaines (RH)
+              </option>
+              <option value="Finance">Finance</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Ventes">Ventes</option>
+              <option value="Recherche et développement (R&D)">
+                Recherche et développement (R&D)
+              </option>
+              <option value="Production">Production</option>
+              <option value="Approvisionnement">Approvisionnement</option>
+              <option value="Service client">Service client</option>
+              <option value="Informatique">Informatique</option>
+              <option value="Juridique">Juridique</option>
+              <option value="Logistique">Logistique</option>
+            </select>
           </div>
+
+          {/* Success or error alert */}
+          {deleteStatus === true && (
+            <div className="alert alert-success" role="alert">
+              Utilisateur supprimé avec succès.
+            </div>
+          )}
+          {deleteStatus === false && (
+            <div className="alert alert-danger" role="alert">
+              Erreur lors de la suppression de l'utilisateur.{" "}
+            </div>
+          )}
 
           <div className="table-responsive">
             <table className="table text-nowrap mb-0 align-middle">
@@ -153,12 +211,21 @@ const UsersTable = () => {
                           alt="Modify"
                           className="cursor-pointer"
                           style={{ width: "20px", height: "20px" }}
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setIsEditModalOpen(true);
+                          }}
                         />
+
                         <img
                           src="/icons/delete.png"
                           alt="Delete"
                           className="cursor-pointer"
                           style={{ width: "20px", height: "20px" }}
+                          onClick={() => {
+                            console.log("Delete image clicked");
+                            handleDeleteUser(user);
+                          }} // Add this line
                         />
                       </div>
                     </td>
@@ -169,7 +236,19 @@ const UsersTable = () => {
           </div>
         </div>
       </div>
+      <ModalConfirmDelete
+        showModal={showModal}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
+      {/* Use the ModalUserEdit component here */}
+      <ModalUserEdit
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        selectedUser={selectedUser}
+      />
     </div>
+    
   );
 };
 
