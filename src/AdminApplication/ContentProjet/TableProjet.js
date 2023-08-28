@@ -106,10 +106,10 @@ const TableProjet = () => {
                   <h6 className="fw-semibold mb-0 fs-4">-</h6>
                 </td>
                 <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i class="ti ti-message-circle-2"></i></button></h6>
+                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i className="ti ti-message-circle-2"></i></button></h6>
                 </td>
                 <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i class="ti ti-list-details"></i></button></h6>
+                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i className="ti ti-list-details"></i></button></h6>
                 </td>
               </tr>
               {/* Add other transaction rows here */}

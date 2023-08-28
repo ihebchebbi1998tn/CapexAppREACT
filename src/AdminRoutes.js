@@ -13,7 +13,7 @@ function AdminRoutes() {
   return (
     <div className="App">
       <div
-        class="page-wrapper"
+        className="page-wrapper"
         id="main-wrapper"
         data-layout="vertical"
         data-navbarbg="skin6"
@@ -22,7 +22,7 @@ function AdminRoutes() {
         data-header-position="fixed"
       >
         <NavBar />
-        <div class="body-wrapper">
+        <div className="body-wrapper">
           <Header />
           <Routes>
             <Route path="/" element={<Content />} />

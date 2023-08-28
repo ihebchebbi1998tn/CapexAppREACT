@@ -5,7 +5,7 @@ const UsersPage = () => {
  
 
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
       <AddUsers />
    <UsersTable />
          </div>

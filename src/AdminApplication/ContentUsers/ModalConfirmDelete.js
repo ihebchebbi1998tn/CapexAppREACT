@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons"; // Import the solid "check" icon
 
 const ModalConfirmDelete = ({ showModal, onCancel, onConfirm }) => {
   return (
@@ -25,14 +27,16 @@ const ModalConfirmDelete = ({ showModal, onCancel, onConfirm }) => {
               className="btn btn-secondary"
               onClick={onCancel}
             >
-              Annuler
+                            <FontAwesomeIcon icon={faXmark} />{" "}
+
             </button>
             <button
               type="button"
               className="btn btn-danger" // You can adjust the color based on your styling
               onClick={onConfirm}
             >
-Confirmer           
+              <FontAwesomeIcon icon={faCheck} />{" "}
+           
  </button>
           </div>
         </div>

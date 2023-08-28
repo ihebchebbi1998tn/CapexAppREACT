@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios"; // Import axios library
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons"; // Import the solid "check" icon
 
 const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
   const [editedUser, setEditedUser] = useState({});
+  const [error, setError] = useState(null); // State for error message
+  const [success, setSuccess] = useState(null); // State for success message
+
+
 
   useEffect(() => {
     if (selectedUser) {
-      setEditedUser(selectedUser);
+      setEditedUser({
+        ...selectedUser,
+        id_utilisateur: selectedUser.id_utilisateur, // Add the ID field
+      });
     }
   }, [selectedUser]);
 
@@ -19,134 +27,164 @@ const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
     }));
   };
 
-  const handleSaveChanges = () => {
-    // Here, you can make an API request to update the user information
-    // based on the editedUser data.
-    // After successful update, close the modal.
-    onClose();
+  const formElementWidth = 425;
+
+  const handleSaveChanges = async () => {
+    const confirmEdit = window.confirm("Êtes-vous sûr de vouloir modifier cet utilisateur ?");
+    if (confirmEdit) {
+      try {
+        const response = await axios.put(
+          `http://127.0.0.1:8000/user/update/${editedUser.id_utilisateur}`,
+          editedUser
+        );
+
+        if (response.data.message && response.data.message.level === "success") {
+          setSuccess("Utilisateur modifié avec succès.");
+          setError(null); // Clear any previous error
+        } else {
+          setError("Impossible de modifier l'utilisateur.");
+          setSuccess(null); // Clear any previous success message
+        }
+      } catch (error) {
+        setError("Une erreur est survenue.");
+        setSuccess(null); // Clear any previous success message
+      }
+    } else {
+      // Cancel the edit
+    }
   };
-
-  const formElementWidth = 425; // You can adjust this value as needed
-
+  
 
   return (
-<div className={`modal fade ${isOpen ? "show" : ""}`} style={{ display: isOpen ? "block" : "none" }}>
-  <div className="modal-dialog modal-dialog-centered">
-    <div className="modal-content" style={{ width: `${formElementWidth}px` }}>
-      <div className="modal-header">
-        <h5 className="modal-title">Edit User</h5>
-        <button type="button" className="btn-close" onClick={onClose}></button>
-      </div>
-      <div className="modal-body">
-        <form>
-        <div className="d-flex">
-  <div className="mb-4 me-3">
-    <label htmlFor="name" className="form-label">Name</label>
-    <input
-      type="text"
-      id="name"
-      name="nom_utilisateur"
-      value={editedUser.nom_utilisateur || ""}
-      readOnly // Set input as read-only
-      onChange={handleInputChange}
-      className="form-control"
-    />
-  </div>
-  <div className="mb-4">
-    <label htmlFor="email" className="form-label">Email</label>
-    <input
-      type="email"
-      id="email"
-      name="email_utilisateur"
-      value={editedUser.email_utilisateur || ""}
-      readOnly // Set input as read-only
-      onChange={handleInputChange}
-      className="form-control"
-    />
-  </div>
-</div>
-
-<div className="d-flex">
-  <div className="mb-4 me-3">
-    <label htmlFor="email" className="form-label">Mot de Passe</label>
-    <input
-      type="password"
-      id="email"
-      name="mot_de_passe"
-      value={editedUser.mot_de_passe || ""}
-      onChange={handleInputChange}
-      className="form-control"
-    />
-  </div>
-  <div className="mb-4">
-    <label htmlFor="code" className="form-label">Code</label>
-    <input
-      type="text" // Use "text" type instead of "email"
-      id="code"
-      name="code_utilisateur"
-      value={editedUser.code_utilisateur || ""}
-      onChange={handleInputChange}
-      className="form-control"
-    />
-  </div>
-</div>
-
-<div className="d-flex">
-  <div className="mb-4 me-3">
-    <label htmlFor="groupe" className="form-label">Groupe</label>
-    <select
-      id="groupe"
-      name="groupe_utilisateur"
-      value={editedUser.groupe_utilisateur || ""}
-      onChange={handleInputChange}
-      className="form-select"
+    <div
+      className={`modal fade ${isOpen ? "show" : ""}`}
+      style={{ display: isOpen ? "block" : "none" }}
     >
-      <option value="CLC">CLC</option>
-      <option value="CLN">CLN</option>
-      <option value="CLSB">CLSB</option>
-      <option value="SBC">SBC</option>
-      <option value="CF">CF</option>
-      <option value="Delta Plastic">Delta Plastic</option>
-      <option value="STIAL">STIAL</option>
-      <option value="SOCOGES">SOCOGES</option>
-    </select>
-  </div>
-  <div className="mb-4">
-    <label htmlFor="departement" className="form-label">Département</label>
-    <select
-      id="departement"
-      name="role_utilisateur"
-      value={editedUser.role_utilisateur || ""}
-      onChange={handleInputChange}
-      className="form-select"
-    >
-      <option value="Ressources humaines (RH)">Ressources humaines (RH)</option>
-      <option value="Finance">Finance</option>
-      <option value="Marketing">Marketing</option>
-      <option value="Ventes">Ventes</option>
-      <option value="Recherche et développement (R&D)">Recherche et développement (R&D)</option>
-      <option value="Production">Production</option>
-      <option value="Approvisionnement">Approvisionnement</option>
-      <option value="Service client">Service client</option>
-      <option value="Informatique">Informatique</option>
-      <option value="Juridique">Juridique</option>
-      <option value="Logistique">Logistique</option>
-    </select>
-  </div>
-</div>
+      <div className="modal-dialog modal-dialog-centered">
+        <div
+          className="modal-content"
+          style={{ width: `${formElementWidth}px` }}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title">Modifier l'utilisateur : <strong>{editedUser.nom_utilisateur}</strong></h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
+          </div>
+         
+          <div className="modal-body">
+          {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
 
-          {/* Add other input fields for user properties */}
-        </form>
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
-        <button type="button" className="btn btn-primary" onClick={handleSaveChanges}>Save Changes</button>
+            {success && (
+              <div className="alert alert-success" role="alert">
+                {success}
+              </div>
+            )}
+            <form>
+              {/* Input fields */}
+              <div className="mb-4">
+                <label htmlFor="mot_de_passe" className="form-label">
+                  Mot de Passe
+                </label>
+                <input
+                  type="password"
+                  id="mot_de_passe"
+                  name="mot_de_passe"
+                  value={editedUser.mot_de_passe || ""}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="code_utilisateur" className="form-label">
+                  Code
+                </label>
+                <input
+                  type="text"
+                  id="code_utilisateur"
+                  name="code_utilisateur"
+                  value={editedUser.code_utilisateur || ""}
+                  onChange={handleInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="groupe_utilisateur" className="form-label">
+                  Groupe
+                </label>
+                <select
+                  id="groupe_utilisateur"
+                  name="groupe_utilisateur"
+                  value={editedUser.groupe_utilisateur || ""}
+                  onChange={handleInputChange}
+                  className="form-select"
+                >
+                  <option value="CLC">CLC</option>
+                  <option value="CLN">CLN</option>
+                  <option value="CLSB">CLSB</option>
+                  <option value="SBC">SBC</option>
+                  <option value="CF">CF</option>
+                  <option value="Delta Plastic">Delta Plastic</option>
+                  <option value="STIAL">STIAL</option>
+                  <option value="SOCOGES">SOCOGES</option>
+                </select>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="role_utilisateur" className="form-label">
+                  Département
+                </label>
+                <select
+                  id="role_utilisateur"
+                  name="role_utilisateur"
+                  value={editedUser.role_utilisateur || ""}
+                  onChange={handleInputChange}
+                  className="form-select"
+                >
+                  <option value="Ressources humaines (RH)">
+                    Ressources humaines (RH)
+                  </option>
+                  <option value="Finance">Finance</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Ventes">Ventes</option>
+                  <option value="Recherche et développement (R&D)">
+                    Recherche et développement (R&D)
+                  </option>
+                  <option value="Production">Production</option>
+                  <option value="Approvisionnement">Approvisionnement</option>
+                  <option value="Service client">Service client</option>
+                  <option value="Informatique">Informatique</option>
+                  <option value="Juridique">Juridique</option>
+                  <option value="Logistique">Logistique</option>
+                </select>
+              </div>
+              {/* ... Add other input fields for user properties ... */}
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon icon={faXmark} />{" "}
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSaveChanges}
+            >
+              <FontAwesomeIcon icon={faCheck} />{" "}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-       
-
   );
 };
 

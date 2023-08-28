@@ -4,7 +4,7 @@ import "./Settings.css";
 
 const ContentSettings = () => {
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
    <SettingsPage />
     </div>
   );

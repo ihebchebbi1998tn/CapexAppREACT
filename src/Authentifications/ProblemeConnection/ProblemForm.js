@@ -55,7 +55,6 @@ const ProblemForm = () => {
           Quel est votre problème?
         </label>
         <textarea
-          type="text"
           className="form-control"
           id="CodePersonne"
           aria-describedby="codeHelp"

@@ -112,7 +112,7 @@ const SuiviBudgetaire = () => {
                 className="btn btn-outline-primary m-1"
                 onClick={() => setShowModalAjouterPhase(true)}
               >
-                <i class="ti ti-plus"></i>
+                <i className="ti ti-plus"></i>
               </button>
             </div>
           </div>
@@ -162,12 +162,12 @@ const SuiviBudgetaire = () => {
                 <div style={{ height: "15px" }}></div>
               </div>
             </div>
-            <a href="#" class="btn btn-success m-1">
-              <i class="ti ti-files"></i> Détails
+            <a href="#" className="btn btn-success m-1">
+              <i className="ti ti-files"></i> Détails
             </a>
             <div className="d-flex justify-content-end">
               <a href="#" className="btn btn-outline-primary m-1">
-                Enregister<i class="ti ti-file-upload"></i>
+                Enregister<i className="ti ti-file-upload"></i>
               </a>
             </div>
           </div>

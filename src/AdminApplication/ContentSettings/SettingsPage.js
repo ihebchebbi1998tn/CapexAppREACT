@@ -157,7 +157,7 @@ const SettingsPage = () => {
                 </div>
               </div>
               <button type="submit" className="btn btn-primary">
-              <i class="ti ti-device-floppy"></i> Sauvegarder 
+              <i className="ti ti-device-floppy"></i> Sauvegarder
               </button>
             </form>
           </div>

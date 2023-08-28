@@ -3,7 +3,7 @@ import SuiviBudgetaire from "./SuiviBudgetaire";
 
 const SelectedProjet = () => {
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
  <SuiviBudgetaire />
     </div>
     );

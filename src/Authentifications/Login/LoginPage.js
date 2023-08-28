@@ -1,6 +1,5 @@
 import React from 'react';
 import LoginForm from './LoginForm';
-import SimpleForm from './simpleform';
 
 const LoginPage = () => {
   return (

@@ -28,7 +28,7 @@ const ModalSuiviBudget = ({ showModal, handleClose }) => {
             </form>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-primary">Sauvegarder <i class="ti ti-device-floppy"></i></button>
+            <button type="button" className="btn btn-primary">Sauvegarder <i className="ti ti-device-floppy"></i></button>
           </div>
         </div>
       </div>

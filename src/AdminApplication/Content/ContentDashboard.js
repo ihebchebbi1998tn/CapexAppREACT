@@ -5,7 +5,7 @@ import PartieDeux  from './PartieDeux';
 
 const Content = () => {
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
    <PartiePre />
    <PartieDeux />
    <PartieDeux />
