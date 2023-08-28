@@ -5,17 +5,17 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons"; // Import 
 
 const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
   const [editedUser, setEditedUser] = useState({});
-  const [error, setError] = useState(null); // State for error message
-  const [success, setSuccess] = useState(null); // State for success message
-
-
+  const [userStatus, setUserStatus] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     if (selectedUser) {
       setEditedUser({
         ...selectedUser,
-        id_utilisateur: selectedUser.id_utilisateur, // Add the ID field
+        id_utilisateur: selectedUser.id_utilisateur,
       });
+      setUserStatus(selectedUser.statut_utilisateur);
     }
   }, [selectedUser]);
 
@@ -27,12 +27,11 @@ const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
     }));
   };
 
-  const formElementWidth = 425;
-
   const handleSaveChanges = async () => {
     const confirmEdit = window.confirm("Êtes-vous sûr de vouloir modifier cet utilisateur ?");
     if (confirmEdit) {
       try {
+        editedUser.statut_utilisateur = userStatus;
         const response = await axios.put(
           `http://127.0.0.1:8000/user/update/${editedUser.id_utilisateur}`,
           editedUser
@@ -40,19 +39,23 @@ const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
 
         if (response.data.message && response.data.message.level === "success") {
           setSuccess("Utilisateur modifié avec succès.");
-          setError(null); // Clear any previous error
+          setError(null);
         } else {
           setError("Impossible de modifier l'utilisateur.");
-          setSuccess(null); // Clear any previous success message
+          setSuccess(null);
         }
       } catch (error) {
         setError("Une erreur est survenue.");
-        setSuccess(null); // Clear any previous success message
+        setSuccess(null);
       }
     } else {
       // Cancel the edit
     }
   };
+
+
+  const formElementWidth = 425;
+
   
 
   return (
@@ -163,6 +166,20 @@ const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
                   <option value="Logistique">Logistique</option>
                 </select>
               </div>
+              <div className="mb-4">
+                <label htmlFor="statut_utilisateur" className="form-label">Statut Utilisateur</label>
+                <select
+                  id="statut_utilisateur"
+                  name="statut_utilisateur"
+                  value={userStatus}
+                  onChange={(e) => setUserStatus(e.target.value)}
+                  className="form-select"
+                >
+                  <option value="Activé">Activé</option>
+                  <option value="Désactivé">Désactivé</option>
+                </select>
+              </div>
+              
               {/* ... Add other input fields for user properties ... */}
             </form>
           </div>

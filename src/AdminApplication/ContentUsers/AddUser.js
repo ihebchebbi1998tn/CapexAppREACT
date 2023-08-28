@@ -31,13 +31,12 @@ const AddUsers = () => {
     "Juridique",
     "Logistique",
   ];
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setError(null);
     setSuccess(null);
-
+  
     if (
       !nomUtilisateur ||
       !emailPrefix ||
@@ -47,10 +46,10 @@ const AddUsers = () => {
       !groupeUtilisateur ||
       !typeUtilisateur
     ) {
-      setError("Please fill all fields.");
+      setError("Veuillez remplir tous les champs.");
       return;
     }
-
+  
     const user = {
       nom_utilisateur: nomUtilisateur,
       email_utilisateur: `${emailPrefix}@groupedelice.com.tn`,
@@ -59,52 +58,36 @@ const AddUsers = () => {
       role_utilisateur: selectedDepartment,
       groupe_utilisateur: groupeUtilisateur,
       type_utilisateur: typeUtilisateur,
+      statut_utilisateur: "Activé",
     };
-
+  
     try {
-      // Check if the user already exists by email or code
-      const response = await fetch(
-        "http://127.0.0.1:8000/user/check-existence",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email_utilisateur: user.email_utilisateur,
-            code_utilisateur: user.code_utilisateur,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.exists) {
-          setError("L'utilisateur existe déjà.");
+      const addResponse = await fetch("http://127.0.0.1:8000/user/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+  
+      const responseData = await addResponse.json();
+  
+      if (addResponse.ok) {
+        if (responseData.message.level === "warning") {
+          setError("Utilisateur avec le même email_utilisateur existe déjà !");
         } else {
-          // User doesn't exist, proceed with adding the user
-          const addResponse = await fetch("http://127.0.0.1:8000/user/create", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          });
-
-          if (addResponse.ok) {
-            setSuccess("User added successfully.");
-          } else {
-            setError("Failed to add user.");
-          }
+          setSuccess(responseData.message.text);
         }
       } else {
-        setError("An error occurred while checking user existence.");
+        setError(responseData.message.text);
       }
     } catch (error) {
-      setError("An error occurred while adding the user.");
+      setError("Une erreur s'est produite lors de l'ajout de l'utilisateur.");
     }
   };
+  
+
+
   return (
     <div className="row">
       <div className="col-lg-12 d-flex align-items-stretch">
@@ -113,17 +96,29 @@ const AddUsers = () => {
           <h5 className="card-title fw-semibold mb-4">Ajouter unUtilisateurs</h5>
 
 
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
+          {error && !error.includes("déjà existe") && (
+        <div className="col-md-12 mt-2">
+          <div className="alert alert-danger" role="alert">
+            {error} 
+          </div>
+        </div>
+      )}
 
-            {success && (
-              <div className="alert alert-success" role="alert">
-                {success}
-              </div>
-            )}
+
+
+{success && (
+  <div className="col-md-12 mt-2">
+    {success.includes("existe déjà") ? (
+      <div className="alert alert-warning custom-warning" role="alert">
+        {success}
+      </div>
+    ) : (
+      <div className="alert alert-success" role="alert">
+        {success}
+      </div>
+    )}
+  </div>
+)}
 
             <form onSubmit={handleSubmit}>
               <div className="row mb-3">

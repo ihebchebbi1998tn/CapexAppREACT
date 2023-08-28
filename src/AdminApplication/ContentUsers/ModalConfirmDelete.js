@@ -35,7 +35,7 @@ const ModalConfirmDelete = ({ showModal, onCancel, onConfirm }) => {
               className="btn btn-danger" // You can adjust the color based on your styling
               onClick={onConfirm}
             >
-              <FontAwesomeIcon icon={faCheck} />{" "}
+                            <FontAwesomeIcon icon={faCheck} />{" "}
            
  </button>
           </div>

@@ -24,7 +24,7 @@ const UsersTable = () => {
   const handleConfirmDelete = () => {
     if (userToDelete) {
       fetch(
-        `http://127.0.0.0:8000/user/delete/${userToDelete.id_utilisateur}`,
+        `http://127.0.0.1:8000/user/delete/${userToDelete.id_utilisateur}`,
         {
           method: "DELETE",
         }
@@ -49,14 +49,26 @@ const UsersTable = () => {
     setShowModal(false);
   };
 
-  useEffect(() => {
+  const fetchData = () => {
     fetch("http://127.0.0.1:8000/user/get")
       .then((response) => response.json())
       .then((data) => {
         setUsers(data);
       })
       .catch((error) => console.error("Error fetching users:", error));
-  }, [reloadComponent]);
+  };
+
+  useEffect(() => {
+    fetchData();
+
+    // Fetch data every 5 seconds (adjust as needed)
+    const intervalId = setInterval(fetchData, 5000);
+
+    return () => {
+      clearInterval(intervalId); // Cleanup the interval when component unmounts
+    };
+  }, []);
+
 
   const filteredUsers = users.filter(
     (user) =>
@@ -167,7 +179,10 @@ const UsersTable = () => {
                     <h6 className="fw-semibold mb-0">Role</h6>
                   </th>
                   <th className="border-bottom-0">
-                    <h6 className="fw-semibold mb-0">-</h6>
+                    <h6 className="fw-semibold mb-0">Statut</h6>
+                  </th>
+                  <th className="border-bottom-0">
+                    <h6 className="fw-semibold mb-0"></h6>
                   </th>
                 </tr>
               </thead>
@@ -199,10 +214,21 @@ const UsersTable = () => {
                           {user.type_utilisateur}
                         </span>
                       ) : user.type_utilisateur === "Utilisateur" ? (
-                        <span className="badge bg-success rounded-3 fw-semibold">
+                        <span className="badge bg-info rounded-3 fw-semibold">
                           {user.type_utilisateur}
                         </span>
                       ) : null}
+                    </td>
+                    <td className="border-bottom-0">
+                      <span
+                        className={`badge ${
+                          user.statut_utilisateur === "Activé"
+                            ? "bg-success"
+                            : "bg-danger"
+                        } rounded-3 fw-semibold`}
+                      >
+                        {user.statut_utilisateur}
+                      </span>
                     </td>
                     <td className="border-bottom-0">
                       <div className="d-flex align-items-center gap-2">
@@ -248,7 +274,6 @@ const UsersTable = () => {
         selectedUser={selectedUser}
       />
     </div>
-    
   );
 };
 
