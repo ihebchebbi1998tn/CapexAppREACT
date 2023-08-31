@@ -1,18 +1,23 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense , useState } from 'react';
 
-const PartOne = lazy(() => import('./PartOne'));
+const AjouterUnNouveauProjet = lazy(() => import('./AjouterUnNouveauProjet'));
 const TableProjet = lazy(() => import('./TableProjet'));
 const SelectedProjet = lazy(() => import('./SelectedProjet'));
 const AjouterProjet = lazy(() => import('./AjouterProjet'));
 const EmptyProjects = lazy(() => import('./EmptyProjects'));
 
 function ContProjetUn() {
+  const [displayForm, setDisplayForm] = useState(false);
+
   return (
     <div className="container-fluid">
       <Suspense fallback={<div>Loading...</div>}>
-        <AjouterProjet />
+      {displayForm ? (
+        <AjouterUnNouveauProjet />
+      ) : (
+        <AjouterProjet onClick={() => setDisplayForm(true)} />
+      )}
         <EmptyProjects />
-        <PartOne />
         <TableProjet />
         <SelectedProjet />
       </Suspense>

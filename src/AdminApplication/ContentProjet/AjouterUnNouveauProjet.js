@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const PartieUn = () => {
+const AjouterUnNouveauProjet = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedExigence, setSelectedExigence] = useState('');
   const [selectedProductivite, setSelectedProductivite] = useState('');
@@ -226,4 +226,4 @@ const PartieUn = () => {
   );
 };
 
-export default PartieUn;
+export default AjouterUnNouveauProjet;

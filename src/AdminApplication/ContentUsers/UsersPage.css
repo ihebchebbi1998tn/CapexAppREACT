@@ -14,3 +14,20 @@
     pointer-events: none;
     color: #aaa;
 }
+
+/* PasswordInput.css */
+.password-input-container {
+    position: relative;
+  }
+  
+  .eye-icon-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+  

@@ -27,8 +27,29 @@ const LoginForm = () => {
     return username + "@groupedelice.com.tn";
   };
 
-  const handleSignInClick = () => {
-    navigate("/authentificationloading"); // Use navigate to redirect
+  const handleSignInClick = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8001/user/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email_utilisateur: completeEmail(),
+          mot_de_passe: password,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.authenticated) {
+        navigate("/authentificationloading");
+      } else {
+        alert("User does not exist or incorrect credentials.");
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+    }
   };
 
   return (
@@ -77,7 +98,7 @@ const LoginForm = () => {
             type="checkbox"
             value=""
             id="flexCheckChecked"
-            checked
+            defaultChecked
           />
           <label className="form-check-label text-dark" htmlFor="flexCheckChecked">
             Se souvenir de cet appareil

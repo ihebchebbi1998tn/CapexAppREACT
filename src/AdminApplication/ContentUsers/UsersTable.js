@@ -15,6 +15,29 @@ const UsersTable = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  const [groups, setGroups] = useState([]);
+  const [departments, setDepartments] = useState([]);
+
+  const fetchGroups = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/groupes/get");
+      const data = await response.json();
+      setGroups(data);
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    }
+  };
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/departements/get");
+      const data = await response.json();
+      setDepartments(data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
+
   const handleDeleteUser = (user) => {
     console.log("handleDeleteUser called with user:", user);
     setUserToDelete(user);
@@ -60,7 +83,8 @@ const UsersTable = () => {
 
   useEffect(() => {
     fetchData();
-
+    fetchGroups();
+    fetchDepartments();
     // Fetch data every 5 seconds (adjust as needed)
     const intervalId = setInterval(fetchData, 5000);
 
@@ -68,7 +92,6 @@ const UsersTable = () => {
       clearInterval(intervalId); // Cleanup the interval when component unmounts
     };
   }, []);
-
 
   const filteredUsers = users.filter(
     (user) =>
@@ -112,38 +135,28 @@ const UsersTable = () => {
               onChange={(e) => setSelectedGroup(e.target.value)}
             >
               <option value="">Tous les groupes</option>
-              <option value="CLC">CLC</option>
-              <option value="CLN">CLN</option>
-              <option value="CLSB">CLSB</option>
-              <option value="SBC">SBC</option>
-              <option value="CF">CF</option>
-              <option value="Delta Plastic">Delta Plastic</option>
-              <option value="STIAL">STIAL</option>
-              <option value="SOCOGES">SOCOGES</option>
+              {groups.map((group) => (
+                <option key={group.id_groupe} value={group.nom_groupe}>
+                  {group.nom_groupe}
+                </option>
+              ))}
             </select>
 
-            {/* Department Select */}
-            <select
+             {/* Department Select */}
+             <select
               className="form-select"
               value={selectedDepartment}
               onChange={(e) => setSelectedDepartment(e.target.value)}
             >
               <option value="">Tous les départements</option>
-              <option value="Ressources humaines (RH)">
-                Ressources humaines (RH)
-              </option>
-              <option value="Finance">Finance</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Ventes">Ventes</option>
-              <option value="Recherche et développement (R&D)">
-                Recherche et développement (R&D)
-              </option>
-              <option value="Production">Production</option>
-              <option value="Approvisionnement">Approvisionnement</option>
-              <option value="Service client">Service client</option>
-              <option value="Informatique">Informatique</option>
-              <option value="Juridique">Juridique</option>
-              <option value="Logistique">Logistique</option>
+              {departments.map((department) => (
+                <option
+                  key={department.id_departement}
+                  value={department.nom_departement}
+                >
+                  {department.nom_departement}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -8,6 +8,7 @@ import UsersPage from "./AdminApplication/ContentUsers/ContentUserPage";
 import AppFooter from "./AdminApplication/AppFooter";
 import ContentSettings from "./AdminApplication/ContentSettings/ContentSettings";
 import ContentDemandes from "./AdminApplication/Demandes/ContentDemandes";
+import ContentCapexSettings from "./AdminApplication/ContentCapexSettings/ContentCapexSettings";
 
 function AdminRoutes() {
   return (
@@ -30,6 +31,7 @@ function AdminRoutes() {
             <Route path="/utilisateurs" element={<UsersPage />} />
             <Route path="/demandes" element={<ContentDemandes />} />
             <Route path="/parametres" element={<ContentSettings />} />
+            <Route path="/parametrecapex" element={<ContentCapexSettings />} />
           </Routes>
         </div>
       </div>
