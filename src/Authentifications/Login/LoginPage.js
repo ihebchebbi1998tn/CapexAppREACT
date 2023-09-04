@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import LoginForm from './LoginForm';
+import { useUser } from "../../UserContext";
 
 const LoginPage = () => {
+  const { userData } = useUser(); // Access userData from UserContext
+  const navigate = useNavigate(); // Initialize useNavigate for navigation
+
+  const userEmail = userData.email; // Updated to userData.email
+  const userId = userData.id; // Updated to userData.id
+  const userRole = userData.type; // Updated to userData.type
+
+  useEffect(() => {
+    // Check if all of the user data is not empty, and if so, redirect to the home page
+    if (userEmail && userId && userRole) {
+      navigate("/authentificationloading");
+    }
+  }, [userEmail, userId, userRole, navigate]);
+
   return (
     <div className="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
       <div className="d-flex align-items-center justify-content-center w-100">

@@ -1,10 +1,14 @@
 import React from 'react';
-import GroupesDepartements from './GroupesDepartements';
+import NormalListData from './NormalListData';
+import FournisseursCentreCout from './FournisseursCentreCout';
+import Test from './Test';
 
 const ContentCapexSettings = () => {
   return (
     <div className="container-fluid">
-   <GroupesDepartements />
+  
+   <NormalListData />
+ <FournisseursCentreCout />
     </div>
   );
 };

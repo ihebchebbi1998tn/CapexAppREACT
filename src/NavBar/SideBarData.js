@@ -18,6 +18,11 @@ export const SideBarData = [
     link: "/DashboardAdmin/utilisateurs",
   },
   {
+    title: "Demandes",
+    icon: <img src="/icons/Emails.png" width="30" alt="" />,
+    link: "/DashboardAdmin/demandes",
+  },
+  {
     title: "Parametres",
     icon: <img src="/icons/Settings.png" width="30" alt="" />,
     link: "/DashboardAdmin/parametrecapex",

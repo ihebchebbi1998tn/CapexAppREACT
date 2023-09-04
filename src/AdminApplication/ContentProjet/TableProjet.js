@@ -38,19 +38,10 @@ const TableProjet = () => {
                   <h6 className="fw-semibold mb-0">Projet</h6>
                 </th>
                 <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Exigence réglémentaire</h6>
-                </th>
-                <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Productivité</h6>
-                </th>
-                <th className="border-bottom-0">
                   <h6 className="fw-semibold mb-0">Priorité</h6>
                 </th>
                 <th className="border-bottom-0">
                   <h6 className="fw-semibold mb-0">Catégorie du projet</h6>
-                </th>
-                <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Nature du projet</h6>
                 </th>
                 <th className="border-bottom-0">
                   <h6 className="fw-semibold mb-0">Total Budget</h6>
@@ -60,15 +51,6 @@ const TableProjet = () => {
                 </th>
                 <th className="border-bottom-0">
                   <h6 className="fw-semibold mb-0">Date fin prévu</h6>
-                </th>
-                <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Pilote du projet</h6>
-                </th>
-                <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Commentaires</h6>
-                </th>
-                <th className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0">Suivis projet</h6>
                 </th>
               </tr>
             </thead>
@@ -93,23 +75,20 @@ const TableProjet = () => {
                 <td className="border-bottom-0">
                   <h6 className="fw-semibold mb-0 fs-4">-</h6>
                 </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4">-</h6>
-                </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4">-</h6>
-                </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4">-</h6>
-                </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4">-</h6>
-                </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i className="ti ti-message-circle-2"></i></button></h6>
-                </td>
-                <td className="border-bottom-0">
-                  <h6 className="fw-semibold mb-0 fs-4"> <button className="btn btn-primary btn-sm"><i className="ti ti-list-details"></i></button></h6>
+                <td>
+                <img
+                        src="/icons/SeeDetails.png"
+                        alt="Details"
+                        className="cursor-pointer"
+                        style={{ width: "30px", height: "30px" }}
+                      
+                      />
+                      <img
+                        src="/icons/delete.png"
+                        alt="Delete"
+                        className="cursor-pointer"
+                        style={{ width: "20px", height: "20px" }}
+                      />
                 </td>
               </tr>
               {/* Add other transaction rows here */}

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import GestionGroupes from "./GestionGroupes";
 import GestionDepartements from "./GestionDepartements";
-import GestionCentreCout from "./GestionCentreCout";
+import ExigenceReglementaire from "./ExigenceReglementaire";
 
 
 const GroupesDepartements = () => {
@@ -15,7 +15,7 @@ const GroupesDepartements = () => {
 
      <GestionDepartements />
      <GestionGroupes />
-<GestionCentreCout />
+<ExigenceReglementaire />
     </div>
   );
 };

@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useUser } from "../../UserContext"; // Import useUser from your UserContext
+
+import axios from "axios"; // Import axios for making API requests
 import "./PasswordInput.css";
 
 const LoginForm = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const navigate = useNavigate(); // Get the navigate function
+  const [alert, setAlert] = useState({ type: "", message: "" }); // State for alert message
+  const navigate = useNavigate(); // Initialize useNavigate for navigation
+  const { updateUser } = useUser(); // Access the updateUser function from UserContext
 
   const handleTogglePassword = () => {
     setPasswordVisible(!passwordVisible);
@@ -19,7 +24,7 @@ const LoginForm = () => {
   };
 
   const handleUsernameChange = (e) => {
-    const inputUsername = e.target.value.replace("@", ""); // Remove "@" if entered
+    const inputUsername = e.target.value.replace("@", "");
     setUsername(inputUsername);
   };
 
@@ -29,31 +34,44 @@ const LoginForm = () => {
 
   const handleSignInClick = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8001/user/authenticate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email_utilisateur: completeEmail(),
-          mot_de_passe: password,
-        }),
-      });
-  
-      const data = await response.json();
-  
-      if (data.authenticated) {
-        navigate("/authentificationloading");
+      // Fetch all users
+      const response = await axios.get("http://127.0.0.1:8000/user/get");
+      const users = response.data;
+
+      // Search for a user with matching email and password
+      const authenticatedUser = users.find(
+        (user) => user.email_utilisateur === completeEmail() && user.mot_de_passe === password && user.type_utilisateur === "Admin"
+      );
+
+      if (authenticatedUser) {
+        // User is authenticated
+        setAlert({ type: "success", message: "Utilisateur connecté avec succès !" });
+        updateUser(authenticatedUser.email_utilisateur,authenticatedUser.id_utilisateur,authenticatedUser.type_utilisateur); // Set user information
+
+        setTimeout(() => {
+          navigate(`/authentificationloading`);
+        }, 3000);
+
       } else {
-        alert("User does not exist or incorrect credentials.");
+        // User not found or credentials do not match
+        setAlert({ type: "error", message: "Les informations d'identification ne correspondent pas." });
       }
     } catch (error) {
       console.error("Error during authentication:", error);
+      setAlert({ type: "error", message: "Une erreur s'est produite lors de la connexion." });
     }
   };
 
+
   return (
-    <form>
+    <>
+      {/* Alert message */}
+      {alert.type && (
+        <div className={`alert alert-${alert.type}`} role="alert">
+          {alert.message}
+        </div>
+      )}
+
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">
           Adresse e-mail
@@ -114,7 +132,7 @@ const LoginForm = () => {
       >
         <FontAwesomeIcon icon={faRightToBracket} className="me-1" /> S'identifier
       </button>
-    </form>
+    </>
   );
 };
 

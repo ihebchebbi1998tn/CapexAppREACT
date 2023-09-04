@@ -141,7 +141,7 @@ const GestionCentreCout = () => {
                         src="/icons/SeeDetails.png"
                         alt="Details"
                         className="cursor-pointer"
-                        style={{ width: "30px", height: "30px" }}
+                        style={{ width: "25px", height: "25px" }}
                         onClick={(event) => handleDisplayDetails(event, index)}
                       />
                       <img

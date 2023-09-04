@@ -122,7 +122,7 @@ const UsersTable = () => {
 
             <input
               type="text"
-              placeholder="Rechercher par nom..."
+              placeholder="🔍 Rechercher par nom..."
               className="form-control me-3"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

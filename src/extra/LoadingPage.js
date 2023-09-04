@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 const LoadingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate(); // Initialize useNavigate for navigation
+
 
   useEffect(() => {
     // Simulate a loading delay for 5 seconds
@@ -19,7 +20,8 @@ const LoadingPage = () => {
     // Redirect after loading is complete
     if (!isLoading) {
       const redirectTimeout = setTimeout(() => {
-        navigate('/DashboardAdmin'); // Redirect to "/DashboardAdmin" after 5 seconds
+        navigate(`/DashboardAdmin`);
+
       }, 0); // Delay the redirect slightly to ensure the state update is processed
 
       return () => clearTimeout(redirectTimeout);
@@ -31,6 +33,7 @@ const LoadingPage = () => {
       {isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <img src="assets/loadinggif.gif" alt="Loading..." style={{ width: '100px', height: '80px' }} />
+         
         </div>
       ) : null}
     </div>

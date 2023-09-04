@@ -7,7 +7,7 @@ import ContProjetUn from "./AdminApplication/ContentProjet/ContentProjet";
 import UsersPage from "./AdminApplication/ContentUsers/ContentUserPage";
 import AppFooter from "./AdminApplication/AppFooter";
 import ContentSettings from "./AdminApplication/ContentSettings/ContentSettings";
-import ContentDemandes from "./AdminApplication/Demandes/ContentDemandes";
+import ContentMails from "./AdminApplication/ContentMails/ContentMails";
 import ContentCapexSettings from "./AdminApplication/ContentCapexSettings/ContentCapexSettings";
 
 function AdminRoutes() {
@@ -29,7 +29,7 @@ function AdminRoutes() {
             <Route path="/" element={<Content />} />
             <Route path="/projets" element={<ContProjetUn />} />
             <Route path="/utilisateurs" element={<UsersPage />} />
-            <Route path="/demandes" element={<ContentDemandes />} />
+            <Route path="/demandes" element={<ContentMails />} />
             <Route path="/parametres" element={<ContentSettings />} />
             <Route path="/parametrecapex" element={<ContentCapexSettings />} />
           </Routes>

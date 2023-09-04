@@ -1,111 +1,141 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useUser } from "../../UserContext";
+import axios from "axios";
 
 const SettingsPage = () => {
+  const { userData } = useUser(); // Access userData from UserContext
+  const [departments, setDepartments] = useState([]);
+    const [groups, setGroups] = useState([]);
+
+  const userId = userData.id; // Updated to userData.id
+
+  const [userDetails, setUserDetails] = useState({
+    nom_utilisateur: "",
+    code_utilisateur: "",
+    email_utilisateur: "",
+    role_utilisateur: "",
+    groupe_utilisateur: "",
+  });
+
+  const fetchDepartments = async () => {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/departements/get");
+        const data = await response.json();
+        setDepartments(data);
+    } catch (error) {
+        console.error("Error fetching departments:", error);
+    }
+};
+
+const fetchGroups = async () => {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/groupes/get");
+        const data = await response.json();
+        setGroups(data);
+    } catch (error) {
+        console.error("Error fetching groups:", error);
+    }
+};
+
+  useEffect(() => {
+    // Fetch user details based on userId
+    fetchDepartments();
+    fetchGroups();
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/user/get/${userId}`);
+        const user = response.data; // Assuming the API response is an object with user details
+
+        // Update the state with user details
+        setUserDetails({
+          nom_utilisateur: user.nom_utilisateur,
+          code_utilisateur: user.code_utilisateur,
+          email_utilisateur: user.email_utilisateur,
+          role_utilisateur: user.role_utilisateur,
+          groupe_utilisateur: user.groupe_utilisateur,
+        });
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userId]);
+
+
   return (
-    
     <div className="row">
-        
       <div className="col-lg-12 d-flex align-items-stretch">
         <div className="col-12 col-lg-12 col-xl-8 mx-auto">
           <div className="my-4">
             <form>
-              <div className="row mt-5 align-items-center">
-                <div className="col-md-3 text-center mb-5">
-                  <div className="avatar avatar-xl">
-                    <img
-                      src="../assets/images/profile/user-1.jpg"
-                      alt="..."
-                      className="avatar-img rounded-circle"
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="row align-items-center">
-                    <div className="col-md-7">
-                      <h4 className="mb-1">ConnectedUser.name</h4>
-                      <p className="small mb-3">
-                        <span className="badge badge-dark">Test adress, TUN</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="row mb-4">
-                    <div className="col-md-7">
-                      <p className="text-muted">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris blandit nisl ullamcorper, rutrum metus in, congue
-                        lectus. In hac habitasse platea dictumst. Cras urna
-                        quam, malesuada vitae risus at, pretium blandit sapien.
-                      </p>
-                    </div>
-                    <div className="col">
-                      <p className="small mb-0 text-muted">
-                        Nec Urna Suscipit Ltd
-                      </p>
-                      <p className="small mb-0 text-muted">
-                        P.O. Box 464, 5975 Eget Avenue
-                      </p>
-                      <p className="small mb-0 text-muted">(537) 315-1481</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr className="my-4" />
-              <div className="form-row">
+              <div className="form-row mb-3">
                 <div className="row">
                   <div className="form-group col-md-6">
-                    <label htmlFor="firstname">Prénom</label>
+                    <label htmlFor="firstname">Nom</label>
                     <input
                       type="text"
-                      id="firstname"
+                      id="nom_utilisateur"
                       className="form-control"
                       placeholder="Brown"
+                      value={userDetails.nom_utilisateur}
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label htmlFor="lastname">Nom</label>
+                    <label htmlFor="lastname">Code</label>
                     <input
                       type="text"
-                      id="lastname"
+                      id="code_utilisateur"
                       className="form-control"
                       placeholder="Asher"
+                      value={userDetails.code_utilisateur}
                     />
                   </div>
                 </div>
               </div>
-              <div className="form-group">
+              <div className="form-group mb-3">
                 <label htmlFor="inputEmail4">E-mail</label>
                 <input
                   type="email"
                   className="form-control"
-                  id="inputEmail4"
+                  id="email_utilisateur"
                   placeholder="brown@asher.me"
+                  value={userDetails.email_utilisateur}
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="inputAddress5">Adresse</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="inputAddress5"
-                  placeholder="P.O. Box 464, 5975 Eget Avenue"
-                />
-              </div>
-              <div className="form-row">
+              <div className="form-row mb-3">
                 <div className="row">
                   <div className="form-group col-md-6">
-                    <label htmlFor="inputCompany5">Entreprise</label>
-                    <input
-                      type="text"
+                    <label htmlFor="inputState5">Département</label>
+                    <select
+                      id="role_utilisateur"
                       className="form-control"
-                      id="inputCompany5"
-                      placeholder="Nec Urna Suscipit Ltd"
-                    />
+                      value={userDetails.role_utilisateur}
+                    >
+                        <option value="">Sélectionnez un département</option>
+                                        {departments.map((department) => (
+                                            <option
+                                                key={department.id_departement}
+                                                value={department.nom_departement}
+                                            >
+                                                {department.nom_departement}
+                                            </option>
+                                        ))}
+                    </select>
                   </div>
                   <div className="form-group col-md-6">
-                    <label htmlFor="inputState5">État</label>
-                    <select id="inputState5" className="form-control">
-                      <option selected>Choisir...</option>
-                      <option>...</option>
+                    <label htmlFor="inputState5">Groupe</label>
+                    <select
+                      id="groupe_utilisateur"
+                      className="form-control"
+                      value={userDetails.groupe_utilisateur}
+                    >
+                      <option value="">Sélectionner un groupe</option>
+                                        {groups.map((group) => (
+                                            <option key={group.id_groupe} value={group.nom_groupe}>
+                                                {group.nom_groupe}
+                                            </option>
+                                        ))}
                     </select>
                   </div>
                 </div>
@@ -156,9 +186,15 @@ const SettingsPage = () => {
                   </ul>
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary">
-              <i className="ti ti-device-floppy"></i> Sauvegarder
-              </button>
+              <hr className="my-4" />
+              <div className="d-flex justify-content-between">
+                <button type="submit" className="btn btn-primary">
+                  <i className="ti ti-device-floppy"></i> Sauvegarder
+                </button>
+                <button type="submit" className="btn btn-danger">
+                  Désactivez mon compte
+                </button>
+              </div>
             </form>
           </div>
         </div>

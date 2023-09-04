@@ -56,7 +56,7 @@ const AddUsers = () => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-
+    
         if (
             !nomUtilisateur ||
             !emailPrefix ||
@@ -69,7 +69,7 @@ const AddUsers = () => {
             setError("Veuillez remplir tous les champs.");
             return;
         }
-
+    
         const user = {
             nom_utilisateur: nomUtilisateur,
             email_utilisateur: `${emailPrefix}@groupedelice.com.tn`,
@@ -80,7 +80,7 @@ const AddUsers = () => {
             type_utilisateur: typeUtilisateur,
             statut_utilisateur: "Activé",
         };
-
+    
         try {
             const addResponse = await fetch("http://127.0.0.1:8000/user/create", {
                 method: "POST",
@@ -89,20 +89,21 @@ const AddUsers = () => {
                 },
                 body: JSON.stringify(user),
             });
-
+    
+            if (!addResponse.ok) {
+                throw new Error("Erreur lors de la création de l'utilisateur.");
+            }
+    
             const responseData = await addResponse.json();
-
-            if (addResponse.ok) {
-                if (responseData.message.level === "warning") {
-                    setError("Utilisateur avec le même email_utilisateur existe déjà !");
-                } else {
-                    setSuccess(responseData.message.text);
-                }
+    
+            if (responseData.message.level === "warning") {
+                setError("Utilisateur avec le même email_utilisateur existe déjà !");
             } else {
-                setError(responseData.message.text);
+                setSuccess(responseData.message.text);
             }
         } catch (error) {
             setError("Une erreur s'est produite lors de l'ajout de l'utilisateur.");
+            console.error("Error during user creation:", error);
         }
     };
 

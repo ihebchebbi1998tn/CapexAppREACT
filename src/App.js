@@ -3,11 +3,12 @@ import LoginPage from "./Authentifications/Login/LoginPage";
 import ProblemPage from "./Authentifications/ProblemeConnection/ProblemPage";
 import AdminRoutes from "./AdminRoutes";
 import LoadingPage from "./extra/LoadingPage";
-
+import { UserProvider } from "./UserContext";
 function App() {
   return (
     <BrowserRouter>
-    
+        <UserProvider> {/* Wrap your App with UserProvider */}
+
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/prblmauthentification" element={<ProblemPage />} />
@@ -15,6 +16,7 @@ function App() {
         <Route path="/authentificationloading" element={<LoadingPage/>} />
 
       </Routes>
+      </UserProvider>
     </BrowserRouter>
   );
 }
