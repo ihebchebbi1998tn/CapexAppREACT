@@ -182,12 +182,7 @@ const UsersTable = () => {
                   <th className="border-bottom-0">
                     <h6 className="fw-semibold mb-0">Email</h6>
                   </th>
-                  <th className="border-bottom-0">
-                    <h6 className="fw-semibold mb-0">Groupe</h6>
-                  </th>
-                  <th className="border-bottom-0">
-                    <h6 className="fw-semibold mb-0">Département</h6>
-                  </th>
+                 
                   <th className="border-bottom-0">
                     <h6 className="fw-semibold mb-0">Role</h6>
                   </th>
@@ -211,16 +206,7 @@ const UsersTable = () => {
                     <td className="border-bottom-0">
                       <p className="mb-0 fw-normal">{user.email_utilisateur}</p>
                     </td>
-                    <td className="border-bottom-0">
-                      <p className="mb-0 fw-normal">
-                        {user.groupe_utilisateur}
-                      </p>
-                    </td>
-                    <td className="border-bottom-0">
-                      <div className="d-flex align-items-center gap-2">
-                        {user.role_utilisateur}
-                      </div>
-                    </td>
+                   
                     <td className="border-bottom-0">
                       {user.type_utilisateur === "Admin" ? (
                         <span className="badge bg-primary rounded-3 fw-semibold">

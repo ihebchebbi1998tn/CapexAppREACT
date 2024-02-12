@@ -20,7 +20,7 @@ const LoadingPage = () => {
     // Redirect after loading is complete
     if (!isLoading) {
       const redirectTimeout = setTimeout(() => {
-        navigate(`/DashboardAdmin`);
+        navigate(`/dashboard`);
 
       }, 0); // Delay the redirect slightly to ensure the state update is processed
 
@@ -32,7 +32,7 @@ const LoadingPage = () => {
     <div>
       {isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <img src="assets/loadinggif.gif" alt="Loading..." style={{ width: '100px', height: '80px' }} />
+          <img src="assets/loadinggif.gif" alt="Loading..." style={{ width: '75px', height: '75px' }} />
          
         </div>
       ) : null}

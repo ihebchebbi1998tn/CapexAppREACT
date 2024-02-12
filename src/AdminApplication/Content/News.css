@@ -1,0 +1,41 @@
+/* Use a unique identifier for your component, e.g., .news-container */
+.news-container .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .news-container .card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Set a fixed height for the card */
+  }
+  
+  .news-container .card .card-img-top {
+    flex: 1; /* Make the image part take up remaining space */
+  }
+  
+  .news-container .card .card-body {
+    flex: 1; /* Make the body part take up remaining space */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .news-container .card.active {
+    border: 2px solid #007bff; /* Highlight the active card with a border */
+  }
+  
+  .news-container .btn-primary {
+    margin-top: 10px; /* Adjust the margin for the navigation buttons */
+  }
+  
+  .news-container .clickable-icon {
+    cursor: pointer;
+    margin: 0 5px; /* Add spacing between the images if needed */
+  }
+  
+  .news-container .clickable-icon:hover {
+    opacity: 0.7; /* Change opacity on hover for visual feedback */
+  }
+  

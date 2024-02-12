@@ -1,0 +1,50 @@
+/* Add this to your CSS stylesheet or use a CSS-in-JS solution like styled-components */
+
+/* Modal container */
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Modal content */
+  .modal-content {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+  }
+  
+  /* Modal header */
+  .modal .modal-header {
+    background-color: #5075DD;
+    color: #ff0000;
+  }
+  
+  
+  /* Modal title */
+  .modal-title {
+    font-size: 24px;
+  }
+  .category-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  
+  /* Info categories */
+  .info-category {
+    margin-bottom: 10px;
+  }
+  
+  /* Message content */
+  .message-content {
+    margin-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+  }
+  
+  /* Message text */
+  .message-content p {
+    font-size: 16px;
+  }
+  
+  /* Customize these styles according to your design preferences. */
+  

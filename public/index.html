@@ -2,14 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />   
-     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CAPEX</title>
+
+    <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/assets/images/logos/icon.png" />   
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/iconCapex.png" />
+    <!-- Add these lines to the <head> of your HTML file -->
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -26,8 +30,7 @@
     -->
     <title>React App</title>
       <!-- Using Local Font -->
-  <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/styles.min.css" />
-  
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/assets/css/styles.min.css" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -39,10 +42,16 @@
       You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
 
-      To begin the development, run `npm start` or `yarn start`.
+      To begin development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/app.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/app.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha384-KyZXEAg3QhqLMpG8r+Jnujsl5+z0I5tV51OwTijS3VLlDD/puTRj5Fz/RzoU2E+11"
+  crossorigin="anonymous"
+></script>
+  </body>
 </html>

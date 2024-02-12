@@ -2,15 +2,15 @@ import React from "react";
 import NavBar from "./NavBar/NavBar";
 import Header from "./AdminApplication/Header";
 import Content from "./AdminApplication/Content/ContentDashboard";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes , Navigate } from "react-router-dom";
 import ContProjetUn from "./AdminApplication/ContentProjet/ContentProjet";
 import UsersPage from "./AdminApplication/ContentUsers/ContentUserPage";
 import AppFooter from "./AdminApplication/AppFooter";
 import ContentSettings from "./AdminApplication/ContentSettings/ContentSettings";
 import ContentMails from "./AdminApplication/ContentMails/ContentMails";
 import ContentCapexSettings from "./AdminApplication/ContentCapexSettings/ContentCapexSettings";
-
 function AdminRoutes() {
+
   return (
     <div className="App">
       <div
@@ -32,6 +32,8 @@ function AdminRoutes() {
             <Route path="/demandes" element={<ContentMails />} />
             <Route path="/parametres" element={<ContentSettings />} />
             <Route path="/parametrecapex" element={<ContentCapexSettings />} />
+             {/* Catch-all route for unmatched routes */}
+          <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
       </div>

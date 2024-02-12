@@ -1,0 +1,14 @@
+/* Add this CSS in your style or CSS file */
+.card-header {
+    background: linear-gradient(to right, #7084dc, #5c8fdc); /* Adjust the color as needed */
+    color: #fff; /* Text color, you can adjust this as well */
+  }
+  
+
+  
+
+  /* Add this CSS in your style or CSS file */
+.card-header h5 {
+    color: #fff; /* Set h5 text color to white */
+  }
+  

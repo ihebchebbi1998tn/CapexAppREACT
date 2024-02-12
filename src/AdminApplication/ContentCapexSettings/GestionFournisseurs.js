@@ -1,49 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 const GestionFournisseurs = () => {
-  const [nomFournisseur, setNomFournisseur] = useState("");
-  const [imageFile, setImageFile] = useState(null);
   const [fournisseurs, setFournisseurs] = useState([]);
   const [message, setMessage] = useState(null);
-
-  const handleNomFournisseurChange = (event) => {
-    setNomFournisseur(event.target.value);
-  };
-
-  const handleImageFileChange = (event) => {
-    setImageFile(event.target.files[0]);
-  };
-
-  const handleAddFournisseur = async () => {
-    const formData = new FormData();
-    formData.append("nom_fournisseur", nomFournisseur);
-    formData.append("photo_fournisseur", imageFile);
-
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/fournisseurs/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      setMessage(response.data.message.text);
-      if (response.data.message.level === "success") {
-        // If successful, refresh the fournisseurs list
-        loadFournisseurs();
-        setNomFournisseur("");
-        setImageFile(null);
-      }
-    } catch (error) {
-      console.error("Error adding fournisseur:", error);
-    }
-  };
+  const [fournisseurName, setFournisseurName] = useState("");
+  const [imageURL, setImageURL] = useState(""); // New state to store image URL
 
   const handleDeleteFournisseur = async (fournisseurId) => {
     try {
@@ -51,19 +15,26 @@ const GestionFournisseurs = () => {
         `http://127.0.0.1:8000/fournisseurs/delete/${fournisseurId}`
       );
 
-      setMessage(response.data.message.text);
+      setMessage({
+        level: "success",
+        text: "Fournisseur supprimé avec succès.",
+      });
       if (response.data.message.level === "success") {
-        // If successful, refresh the fournisseurs list
         loadFournisseurs();
       }
     } catch (error) {
       console.error("Error deleting fournisseur:", error);
     }
+    setTimeout(() => {
+      setMessage({ level: null, text: "" });
+    }, 6000);
   };
 
   const loadFournisseurs = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/fournisseurs/get");
+      const response = await axios.get(
+        "http://127.0.0.1:8000/fournisseurs/get"
+      );
       setFournisseurs(response.data);
     } catch (error) {
       console.error("Error loading fournisseurs:", error);
@@ -73,6 +44,43 @@ const GestionFournisseurs = () => {
   useEffect(() => {
     loadFournisseurs();
   }, []);
+
+  const handleAddFournisseur = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/fournisseurs/create",
+        {
+          nom_fournisseur: fournisseurName,
+          photo_fournisseur: imageURL, // Use the entered URL as the image
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setMessage({
+        level: "success",
+        text: "Fournisseur ajouté avec succès.",
+      });
+      if (response.data.message.level === "success") {
+        loadFournisseurs();
+        setFournisseurName("");
+        setImageURL(""); // Clear the imageURL after adding
+      }
+    } catch (error) {
+      console.error("Error adding fournisseur:", error);
+      setMessage({
+        level: "danger",
+        text: "Erreur lors de l'ajout du fournisseur.",
+      });
+    }
+
+    setTimeout(() => {
+      setMessage({ level: null, text: "" });
+    }, 6000);
+  };
 
   return (
     <div className="col-md-8 d-flex">
@@ -87,6 +95,9 @@ const GestionFournisseurs = () => {
           className="card-body"
           style={{ maxHeight: "300px", overflowY: "scroll" }}
         >
+          {message && (
+            <div className={`alert alert-${message.level}`}>{message.text}</div>
+          )}
           <form encType="multipart/form-data">
             <div className="mb-3">
               <div className="d-flex">
@@ -94,15 +105,16 @@ const GestionFournisseurs = () => {
                   type="text"
                   className="form-control me-3"
                   placeholder="Nom du fournisseur"
-                  value={nomFournisseur}
-                  onChange={handleNomFournisseurChange}
+                  value={fournisseurName}
+                  onChange={(e) => setFournisseurName(e.target.value)}
                   required
                 />
                 <input
-                  type="file"
+                  type="url" // Use 'url' type for entering image URLs
                   className="form-control me-3"
-                  accept="image/*"
-                  onChange={handleImageFileChange}
+                  placeholder="URL de l'image"
+                  value={imageURL}
+                  onChange={(e) => setImageURL(e.target.value)}
                   required
                 />
                 <FontAwesomeIcon
@@ -114,11 +126,6 @@ const GestionFournisseurs = () => {
               </div>
             </div>
           </form>
-          {message && (
-            <div className={`alert alert-${message.level}`}>
-              {message.text}
-            </div>
-          )}
           <table className="table">
             <thead>
               <tr>
@@ -133,19 +140,22 @@ const GestionFournisseurs = () => {
                 <tr key={fournisseur.id_fournisseur}>
                   <td>
                     <img
-                      src={`/uploads/${fournisseur.photo_fournisseur}`}
+                      src={fournisseur.photo_fournisseur}
                       alt={fournisseur.nom_fournisseur}
-                      style={{ width: "30px", height: "30px" }}
+                      style={{ width: "70px", height: "30px" }}
                     />
                   </td>
                   <td>{fournisseur.nom_fournisseur}</td>
                   <td>{fournisseur.evaluation_fournisseur}</td>
                   <td>
-                    <FontAwesomeIcon
-                      icon={faTrash}
+                  <img
+                      src="/icons/delete.png"
+                      alt="Delete"
                       className="cursor-pointer"
                       style={{ width: "20px", height: "20px" }}
-                      onClick={() => handleDeleteFournisseur(fournisseur.id_fournisseur)}
+                      onClick={() =>
+                        handleDeleteFournisseur(fournisseur.id_fournisseur)
+                      }
                     />
                   </td>
                 </tr>
@@ -159,4 +169,3 @@ const GestionFournisseurs = () => {
 };
 
 export default GestionFournisseurs;
-    

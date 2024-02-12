@@ -1,64 +1,71 @@
-import React from 'react';
-
+import React, { useEffect, useRef } from 'react';
+import { Chart } from 'chart.js/auto';
 
 const PartiePre = () => {
+  const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
+
+  useEffect(() => {
+    // Create the chart after the component has mounted
+    if (chartRef.current) {
+      const ctxB = chartRef.current.getContext('2d');
+      
+      // Destroy any existing chart
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+
+      chartInstanceRef.current = new Chart(ctxB, {
+        type: 'bar',
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+  }, []);
+
   return (
-    <div className="row">
-    <div className="col-lg-8 d-flex align-items-strech">
-      <div className="card w-100">
-        <div className="card-body">
-          <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
-            <div className="mb-3 mb-sm-0">
-              <h5 className="card-title fw-semibold">Partie 1</h5>
+      <div className="col-lg-6 d-flex ">
+        <div className="card w-100">
+          <div className="card-header d-block d-md-flex">
+              <h5 className="mb-0">Projets</h5>
             </div>
-           
-          </div>
-          <div id="chart"></div>
-        </div>
-      </div>
-    </div>
-    <div className="col-lg-4">
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="card overflow-hidden">
-            <div className="card-body p-4">
-              <h5 className="card-title mb-9 fw-semibold">Partie 1.2</h5>
-              <div className="row align-items-center">
-                <div className="col-8">
-                 
-                </div>
-                <div className="col-4">
-                  <div className="d-flex justify-content-center">
-                    <div id="breakup"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-12">
-         
-          <div className="card">
-            <div className="card-body">
-              <div className="row alig n-items-start">
-                <div className="col-8">
-                  <h5 className="card-title mb-9 fw-semibold"> Partie 1.3 </h5>
-                  
-                  
-                </div>
-                <div className="col-4">
-                  <div className="d-flex justify-content-end">
-                   
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div id="earning"></div>
+          <div className="card-body">
+            <canvas id="barChart" ref={chartRef}></canvas>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+      
   );
 };
 

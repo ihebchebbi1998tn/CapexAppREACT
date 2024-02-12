@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faPenToSquare,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
-const ModalCentreCoutDetails = ({ isOpen, onClose, selectedCentreCout, onUpdate }) => {
+const ModalCentreCoutDetails = ({
+  isOpen,
+  onClose,
+  selectedCentreCout,
+  onUpdate,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCentreCout, setEditedCentreCout] = useState({});
 
@@ -20,14 +29,25 @@ const ModalCentreCoutDetails = ({ isOpen, onClose, selectedCentreCout, onUpdate 
     setEditedCentreCout(selectedCentreCout || {});
   };
 
-  // Inside handleSaveChanges function
-const handleSaveChanges = async () => {
+  const handleSaveChanges = async () => {
     try {
+      // Check if the new code_centrecout already exists
+      const existingCentreCout = await axios.get(
+        `http://127.0.0.1:8000/centres-cout/details/${editedCentreCout.code_centrecout}`
+      );
+
+      if (existingCentreCout.data.error) {
+        // Code already exists, handle accordingly (e.g., show an error message)
+        console.error("Code already exists:", existingCentreCout.data.error);
+        // You might want to display an error message to the user or take appropriate action
+        return;
+      }
+
       const response = await axios.put(
         `http://127.0.0.1:8000/centres-cout/update/${selectedCentreCout?.id_centrecout}`,
         editedCentreCout
       );
-  
+
       if (response.data.message && response.data.message.level === "success") {
         setIsEditing(false);
         onUpdate(selectedCentreCout?.id_centrecout, editedCentreCout);
@@ -36,7 +56,6 @@ const handleSaveChanges = async () => {
       console.error("Error updating centre de coût:", error);
     }
   };
-  
 
   return (
     <div
@@ -46,7 +65,7 @@ const handleSaveChanges = async () => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
+            <h5 className="modal-title text-white">
               Détails du centre de coût :{" "}
               <strong>{selectedCentreCout?.code_centrecout}</strong>
             </h5>
@@ -54,6 +73,24 @@ const handleSaveChanges = async () => {
           </div>
           <div className="modal-body">
             <form>
+              {/* Add an input for code_centrecout */}
+              <div className="mb-3">
+                <label htmlFor="code_centrecout" className="form-label">
+                  Code Centre Cout
+                </label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    id="code_centrecout"
+                    name="code_centrecout"
+                    value={editedCentreCout.code_centrecout || ""}
+                    onChange={handleInputChange}
+                    className="form-control"
+                  />
+                ) : (
+                  <p>{selectedCentreCout?.code_centrecout}</p>
+                )}
+              </div>
               <div className="mb-3">
                 <label htmlFor="groupe_centrecout" className="form-label">
                   Groupe
@@ -149,14 +186,14 @@ const handleSaveChanges = async () => {
                   className="btn btn-secondary"
                   onClick={() => setIsEditing(false)}
                 >
-                  <FontAwesomeIcon icon={faTimes} /> 
+                  <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSaveChanges}
                 >
-                  <FontAwesomeIcon icon={faCheck} /> 
+                  <FontAwesomeIcon icon={faCheck} />
                 </button>
               </>
             ) : (
@@ -165,7 +202,7 @@ const handleSaveChanges = async () => {
                 className="btn btn-primary"
                 onClick={handleEdit}
               >
-                <FontAwesomeIcon icon={faPenToSquare} /> 
+                <FontAwesomeIcon icon={faPenToSquare} />
               </button>
             )}
           </div>

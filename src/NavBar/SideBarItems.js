@@ -1,13 +1,22 @@
 import React from "react";
-import { SideBarData } from "./SideBarData";
+import { useUser } from "../UserContext";
 import { Link, useLocation } from "react-router-dom";
+import { SideBarData } from "./SideBarData"; // Add this line
 
 const SideBarItems = () => {
   const location = useLocation();
+  const { userData } = useUser();
+
+  const isAdmin = userData.type === "Admin";
+
+  // Filter sidebar items based on user type
+  const filteredSideBarData = isAdmin
+    ? SideBarData // If admin, show all items
+    : SideBarData.filter(item => ['Dashboard', 'Projets', 'Messages'].includes(item.title));
 
   return (
     <>
-      {SideBarData.map((val, key) => (
+      {filteredSideBarData.map((val, key) => (
         <li
           className={location.pathname === val.link ? "sidebar-item selected" : "sidebar-item"}
           key={key}

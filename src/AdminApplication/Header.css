@@ -37,3 +37,8 @@
     background-color: #f1f1f1;
     border-radius: 3px;
   }
+  .email-count {
+    font-size: 12px;
+    color: black;
+    /* Add other styles for the count number */
+  }

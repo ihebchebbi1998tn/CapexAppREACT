@@ -94,7 +94,7 @@ const ModalUserEdit = ({ isOpen, onClose, selectedUser }) => {
                     style={{ width: `${formElementWidth}px` }}
                 >
                     <div className="modal-header">
-                        <h5 className="modal-title">Modifier l'utilisateur : <strong>{editedUser.nom_utilisateur}</strong></h5>
+                        <p className="modal-title text-white">Modifier l'utilisateur : <strong>{editedUser.nom_utilisateur}</strong></p>
                         <button
                             type="button"
                             className="btn-close"

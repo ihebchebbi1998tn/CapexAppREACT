@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./demandes.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,10 +12,11 @@ const iconStyle = {
   marginRight: "0.5rem", // Adjust the margin as needed
 };
 
-const NavBarDemandes = () => {
-  const [ShowModalEnvoyerMessage, setShowModalEnvoyerMessage] =
-    useState(false);
 
+const NavBarDemandes = ({ onShowTableauDemandes, onShowTableauDemandesSent }) => {
+  const [ShowModalEnvoyerMessage, setShowModalEnvoyerMessage] = useState(false);
+
+  
   return (
     <div className="col-md-3 d-flex">
       <div className="w-100">
@@ -30,13 +30,19 @@ const NavBarDemandes = () => {
               <span>Envoyer un message</span>
             </div>
           </button>
-          <button className="btn btn-secondary mb-2 text-left">
+          <button
+            className="btn btn-secondary mb-2 text-left"
+            onClick={onShowTableauDemandes}
+          >
             <div className="d-flex align-items-center">
               <FontAwesomeIcon icon={faInbox} style={iconStyle} />
               <span>Boîte de réception</span>
             </div>
           </button>
-          <button className="btn btn-secondary text-left">
+          <button
+            className="btn btn-secondary text-left"
+            onClick={onShowTableauDemandesSent}
+          >
             <div className="d-flex align-items-center">
               <FontAwesomeIcon icon={faFileImport} style={iconStyle} />
               <span>Messages envoyés</span>
